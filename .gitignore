@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+/dist
+/.next
+/.turbo
+/.cache
+coverage/
+
+# Env files
+.env
+.env.*.local
+
+# Prisma
+prisma/*.db
+prisma/migrations/
+/apps/api/prisma/*.db
+/apps/api/node_modules
+/apps/web/node_modules
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
