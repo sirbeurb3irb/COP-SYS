@@ -1,0 +1,22 @@
+{
+  "name": "endfcop-monorepo",
+  "private": true,
+  "version": "0.1.0",
+  "description": "ENDFCOP (Ethiopian National Defence Forces Common Operational Picture) monorepo",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": ">=18.18.0",
+    "npm": ">=9.0.0"
+  },
+  "scripts": {
+    "build": "npm run -w @endfcop/api build && npm run -w @endfcop/web build",
+    "dev": "npm run -w @endfcop/api dev & npm run -w @endfcop/web dev",
+    "test": "npm run -w @endfcop/api test && npm run -w @endfcop/web test",
+    "lint": "npm run -w @endfcop/api lint && npm run -w @endfcop/web lint",
+    "format": "npm run -w @endfcop/api format && npm run -w @endfcop/web format"
+  },
+  "license": "MIT"
+}

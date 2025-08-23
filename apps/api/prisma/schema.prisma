@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  firstName String
+  lastName  String
+  role      Role     @default(OPERATOR)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  events    Event[]
+  units     Unit[]
+}
+
+enum Role {
+  ADMIN
+  COMMANDER
+  OPERATOR
+  VIEWER
+}
+
+model Unit {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  type      UnitType
+  status    UnitStatus @default(ACTIVE)
+  location  Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  users     User[]
+  events    Event[]
+}
+
+enum UnitType {
+  INFANTRY
+  ARMOR
+  ARTILLERY
+  AIRFORCE
+  NAVY
+  SUPPORT
+}
+
+enum UnitStatus {
+  ACTIVE
+  STANDBY
+  ENGAGED
+  DISABLED
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  severity    Severity @default(LOW)
+  location    Json
+  occurredAt  DateTime @default(now())
+  createdById String
+  createdBy   User     @relation(fields: [createdById], references: [id])
+  unitId      String?
+  unit        Unit?    @relation(fields: [unitId], references: [id])
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
