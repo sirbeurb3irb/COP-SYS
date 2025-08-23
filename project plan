@@ -1,0 +1,126 @@
+Manual COP Dashboard — Finalized Project Plan
+1. Project Goal
+
+Build a manual Common Operational Picture (COP) dashboard where operators submit and view reports on a 2D/3D map.
+
+Manual reports only — no AI.
+
+OpenStreetMap tiles for free map access.
+
+Java Spring Boot backend with PostgreSQL + PostGIS for data storage.
+
+CesiumJS frontend for interactive map visualization.
+
+Dashboard includes panels for reports, map, filters, and optional timeline/history.
+
+2. Roles & Permissions
+Role	Frontend Access	Backend/API Access	Notes
+Administrator	All panels (map, form, report list, timeline, user management)	POST/GET/PUT/DELETE /reports, user management	Full system control
+Operator / Field Reporter	Map + report form + report list + filters	POST /reports, GET /reports, optional PUT /reports/{id} (own reports)	Can submit & view reports
+Analyst / Commander	Map + filters + report list + export panel	GET /reports	Read-only; can analyze & export
+Viewer / Guest	Map + read-only report list	GET /reports	Monitoring/training only; no edits
+3. Core Features
+
+Map Panel: CesiumJS with OpenStreetMap tiles; 2D/3D view; markers for reports.
+
+Report Form (Left Panel): Submit manual reports with type, description, and reporter.
+
+Report List (Right Panel): View all reports; click to zoom to marker.
+
+Optional Timeline/History Panel: Bottom panel showing chronological events.
+
+Filters: Show/hide reports by type.
+
+Export: CSV or PDF (optional, for Admins/Analysts).
+
+4. Database Schema
+CREATE TABLE reports (
+    id SERIAL PRIMARY KEY,
+    type VARCHAR(50),          -- enemy, ally, supply, incident
+    description TEXT,
+    latitude DOUBLE PRECISION,
+    longitude DOUBLE PRECISION,
+    reporter VARCHAR(50),
+    timestamp TIMESTAMP DEFAULT NOW()
+);
+
+5. Backend (Java Spring Boot)
+
+REST API Endpoints:
+
+POST /reports → Add report
+
+GET /reports → Get all reports
+
+GET /reports/{id} → Get specific report
+
+Security: Spring Security to enforce role-based permissions
+
+ORM: Hibernate / JPA
+
+Database: PostgreSQL + PostGIS
+
+6. Frontend (CesiumJS + OpenStreetMap)
+const viewer = new Cesium.Viewer("cesiumContainer", {
+    imageryProvider: new Cesium.OpenStreetMapImageryProvider({
+        url: 'https://a.tile.openstreetmap.org/'
+    }),
+    baseLayerPicker: false
+});
+
+
+Supports 2D, 3D, and Columbus view.
+
+Markers added using viewer.entities.add() from backend data.
+
+Left panel form submits via REST API.
+
+Right panel lists reports; clicking a report zooms to its marker.
+
+7. Workflow
+
+Operator clicks on the map → manual report form appears.
+
+Fills in report details → submits to Java backend.
+
+Backend saves report to PostgreSQL.
+
+Cesium frontend fetches reports → displays markers/icons on the map.
+
+Users filter reports, view details, or analyze data (role-based).
+
+8. Optional Enhancements
+
+Color-coded markers/icons by report type.
+
+Role-specific dashboards (Admins full, Analysts view/filter/export, Operators submit only, Viewers read-only).
+
+Audit log for submissions/edits/deletions.
+
+Offline caching & synchronization.
+
+Timeline/history panel for events.
+
+Export reports to CSV/PDF.
+
+9. Visual Dashboard Overview
+
+Left Panel: Report form + filters → Admins & Operators
+
+Center Panel: CesiumJS map → All roles
+
+Right Panel: Report list → All roles
+
+Bottom Panel: Timeline/history → Admins & Analysts
+
+Role Indicators: Color-coded access (red = Admin, blue = Operator, green = Analyst, gray = Viewer)
+
+✅ Outcome:
+
+Fully manual COP dashboard
+
+Free map integration using OpenStreetMap
+
+Java backend handles data storage & API
+
+CesiumJS provides interactive map visualization
