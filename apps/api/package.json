@@ -15,7 +15,7 @@
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate deploy || prisma db push",
     "prisma:seed": "prisma db seed",
-    "test": "jest --runInBand"
+    "test": "cross-env DATABASE_URL=file:./dev.db prisma generate --schema=prisma/schema.sqlite.prisma && cross-env DATABASE_URL=file:./dev.db prisma db push --schema=prisma/schema.sqlite.prisma && jest --runInBand"
   },
   "dependencies": {
     "@prisma/client": "^5.19.0",
@@ -35,7 +35,7 @@
     "swagger-ui-express": "^5.0.1",
     "yaml": "^2.5.0",
     "zod": "^3.23.8"
-  }
+  },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
@@ -47,6 +47,7 @@
     "@types/supertest": "^2.0.16",
     "@types/morgan": "^1.9.9",
     "@types/swagger-ui-express": "^4.1.7",
+    "cross-env": "^7.0.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.30.0",

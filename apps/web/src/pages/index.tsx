@@ -5,6 +5,8 @@ import axios from 'axios';
 
 const Map = dynamic(() => import('../sections/Map'), { ssr: false });
 
+export async function getServerSideProps() { return { props: {} }; }
+
 export default function HomePage() {
 	const [events, setEvents] = useState<any[]>([]);
 

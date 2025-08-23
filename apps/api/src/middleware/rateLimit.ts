@@ -9,7 +9,7 @@ const limiter = new RateLimiterMemory({
 export function rateLimit() {
 	return async (req: Request, res: Response, next: NextFunction) => {
 		try {
-			const key = req.ip;
+			const key = (req.ip || req.socket.remoteAddress || 'unknown') as string;
 			await limiter.consume(key);
 			next();
 		} catch {
